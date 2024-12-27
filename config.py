@@ -1,13 +1,25 @@
+from os import getenv
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+# Create graphs directory if it doesn't exist
+os.makedirs('graphs', exist_ok=True)
 
 EMAIL_CONFIG = {
-    'smtp_server': 'smtp.gmail.com',
-    'smtp_port': 587,
-    'sender_email': 'your-email@gmail.com',
-    'sender_password': 'your-app-specific-password',
-    'recipient_email': 'recipient@email.com'
+    'smtp_server': getenv('SMTP_SERVER', 'smtp.gmail.com'),
+    'smtp_port': int(getenv('SMTP_PORT', '587')),
+    'sender_email': getenv('SENDER_EMAIL'),
+    'sender_password': getenv('SENDER_PASSWORD'),
+    'recipient_email': getenv('RECIPIENT_EMAIL')
 }
 
 ASSETS = {
     'crypto': ['bitcoin', 'ethereum', 'cardano'],
-    'stocks': ['AAPL', 'GOOGL', 'MSFT']
+    'stocks': {
+        'period': '1mo',
+        'AAPL': 'GOOGL',
+        'MSFT': 'GOOGL'
+    }
 }

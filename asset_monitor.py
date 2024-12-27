@@ -1,16 +1,13 @@
-
 from datetime import datetime, timedelta
 import yfinance as yf
 from pycoingecko import CoinGeckoAPI
 import pandas as pd
 import plotly.graph_objects as go
 from email_service import EmailService
-from database import Database
 
 class AssetMonitor:
     def __init__(self):
         self.cg = CoinGeckoAPI()
-        self.db = Database()
         self.email_service = EmailService()
         
     def fetch_crypto_data(self, crypto_ids):

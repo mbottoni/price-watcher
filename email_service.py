@@ -1,4 +1,3 @@
-
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -47,7 +46,7 @@ class EmailService:
             # Attach graph image
             with open(asset['graph_path'], 'rb') as f:
                 img = MIMEImage(f.read())
-                img.add_header('Content-ID', f'<{asset['name']}_graph>')
+                img.add_header('Content-ID', f'<{asset["name"]}_graph>')
                 msg.attach(img)
 
         html_content += """
