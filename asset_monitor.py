@@ -73,19 +73,26 @@ class AssetMonitor:
 
         # Process stock assets
         for symbol in stock_data:
-            current_price = stock_data[symbol]['Close'].iloc[-1]
-            daily_change = ((current_price - stock_data[symbol]['Close'].iloc[-2]) /
-                          stock_data[symbol]['Close'].iloc[-2] * 100)
-            
-            graph = self.generate_graph(stock_data[symbol], symbol)
-            graph.write_image(f"graphs/{symbol}_graph.png")
-            
-            report_data['assets'].append({
-                'name': symbol,
-                'price': current_price,
-                'daily_change': daily_change,
-                'graph_path': f"graphs/{symbol}_graph.png"
-            })
+            try:
+                current_price = stock_data[symbol]['Close'].iloc[-1] if not stock_data[symbol].empty else None
+                if current_price is None:
+                    print(f"No data available for {symbol}")
+                    continue
+                daily_change = ((current_price - stock_data[symbol]['Close'].iloc[-2]) /
+                              stock_data[symbol]['Close'].iloc[-2] * 100)
+                
+                graph = self.generate_graph(stock_data[symbol], symbol)
+                graph.write_image(f"graphs/{symbol}_graph.png")
+                
+                report_data['assets'].append({
+                    'name': symbol,
+                    'price': current_price,
+                    'daily_change': daily_change,
+                    'graph_path': f"graphs/{symbol}_graph.png"
+                })
+            except KeyError:
+                print(f"Failed to fetch data for {symbol}")
+                continue
 
         # Send email report
         self.email_service.send_daily_report(report_data)
